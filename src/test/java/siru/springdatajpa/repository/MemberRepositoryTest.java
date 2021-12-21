@@ -10,6 +10,7 @@ import siru.springdatajpa.entity.Team;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -160,5 +161,21 @@ class MemberRepositoryTest {
         assertThat(result.size()).isEqualTo(2);
         assertThat(result.get(0).getUsername()).isEqualTo("memberA");
         assertThat(result.get(1).getUsername()).isEqualTo("memberB");
+    }
+
+    @Test
+    void returnType() {
+        // given
+        Member member1 = new Member("memberA", 10);
+        Member member2 = new Member("memberB", 20);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        // when
+        List<Member> list = memberRepository.findListByUsername("memberA");
+        Member memberResult = memberRepository.findMemberByUsername("memberA");
+        Optional<Member> optionalMember = memberRepository.findOptionalByUsername("memberA");
+
+        // then
     }
 }
