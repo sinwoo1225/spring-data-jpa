@@ -303,6 +303,37 @@ class MemberRepositoryTest {
 
         // then
     }
-    
+
+    @Test
+    void queryHint() {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");
+        em.flush(); // -> 변경 감지 맟 sql 저장소의 쿼리를 DB로 날림 (QueryHint로 최적화)
+
+        // then
+
+    }
+    @Test
+    void lock() {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        List<Member> result = memberRepository.findLockByUsername("member1");
+
+        // then
+
+    }
+
 
 }
