@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import siru.springdatajpa.dto.MemberDto;
@@ -41,4 +42,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Slice<Member> findSliceByAge(int age, Pageable pageable);
 
+    /**
+     * 벌크연산의 결과를 영속성 컨텍스트에 반영하기 위해서는 @Modifying의 clearAutomatically옵션을 true로 준다.
+     */
+    @Modifying
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age);
 }
